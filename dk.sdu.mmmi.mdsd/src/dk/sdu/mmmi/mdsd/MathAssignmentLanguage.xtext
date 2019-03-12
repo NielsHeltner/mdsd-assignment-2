@@ -1,0 +1,27 @@
+grammar dk.sdu.mmmi.mdsd.MathAssignmentLanguage with org.eclipse.xtext.common.Terminals
+
+generate mathAssignmentLanguage "http://www.sdu.dk/mmmi/mdsd/MathAssignmentLanguage"
+
+MathematicalExpression:
+	'result' 'is' expression=AdditionOrSubtraction
+;
+
+AdditionOrSubtraction returns Expression:
+	MultiplicationOrDivision (
+		({Addition.left=current} '+' | {Subtraction.left=current} '-' ) 
+		right=MultiplicationOrDivision)*
+;
+
+MultiplicationOrDivision returns Expression:
+	Primary (
+		({Multiplication.left=current} '*' | {Division.left=current} '/' ) 
+		right=Primary)*
+;
+
+Primary returns Expression:
+	Literal | '(' AdditionOrSubtraction ')'
+;
+
+Literal:
+	value=INT
+;
