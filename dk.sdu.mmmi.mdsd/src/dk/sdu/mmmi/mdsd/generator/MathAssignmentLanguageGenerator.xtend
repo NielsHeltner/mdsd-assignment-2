@@ -3,17 +3,19 @@
  */
 package dk.sdu.mmmi.mdsd.generator
 
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Addition
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Division
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Literal
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Multiplication
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Subtraction
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
-import javax.swing.JOptionPane
-import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.MathematicalExpression
-import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Addition
-import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Subtraction
-import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Multiplication
-import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Division
-import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Literal
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Model
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.EvaluateExpression
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.VariableReference
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.VariableDeclaration
 
 /**
  * Generates code from your model files on save.
@@ -23,39 +25,25 @@ import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Literal
 class MathAssignmentLanguageGenerator extends AbstractGenerator {
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
-		val math = resource.allContents.filter(MathematicalExpression).next
-		val result = math.expression.compute
-		System.out.println("Math expression = " + math.expression.display)
-		// For +1 score, replace with hovering, see Bettini Chapter 8
-		JOptionPane.showMessageDialog(null, "result = " + result, "Math Language", JOptionPane.INFORMATION_MESSAGE)
+		val math = resource.allContents.filter(Model).head
+		//System.out.println("Math expression = " + math.elements.display)
+		math.elements.forEach[
+			println(display)
+		]
 	}
 	
-	/**
-	 * Start of recursive multi-dispatch methods for interpreting an arithmetic expression
-	 */
-	def dispatch int compute(Addition expression) {
-		compute(expression.left) + compute(expression.right)
-	}
-	
-	def dispatch int compute(Subtraction expression) {
-		compute(expression.left) - compute(expression.right)
-	}
-	
-	def dispatch int compute(Multiplication expression) {
-		compute(expression.left) * compute(expression.right)
-	}
-	
-	def dispatch int compute(Division expression) {
-		compute(expression.left) / compute(expression.right)
-	}
-	
-	def dispatch compute(Literal expression) {
-		expression.value
-	}
 	
 	/**
 	 * Start of recursive multi-dispatch methods for displaying an arithmetic expression's complete syntax tree
 	 */
+	def dispatch CharSequence display(VariableDeclaration element) {
+		'''var «element.name» = «element.expression.display» «IF element.in !== null» in («element.in.display») «ENDIF»'''
+	}
+	
+	def dispatch CharSequence display(EvaluateExpression element) {
+		'''Result is = «element.expression.display»'''
+	}
+	
 	def dispatch CharSequence display(Addition expression)
 		'''(«expression.left.display» + «expression.right.display»)'''
 	
@@ -70,5 +58,8 @@ class MathAssignmentLanguageGenerator extends AbstractGenerator {
 	
 	def dispatch display(Literal expression)
 		'''«expression.value»'''
+	
+	def dispatch CharSequence display(VariableReference expression)
+		'''«expression.variable.expression.display»'''
 	
 }

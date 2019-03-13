@@ -2,8 +2,20 @@ grammar dk.sdu.mmmi.mdsd.MathAssignmentLanguage with org.eclipse.xtext.common.Te
 
 generate mathAssignmentLanguage "http://www.sdu.dk/mmmi/mdsd/MathAssignmentLanguage"
 
-MathematicalExpression:
-	'result' 'is' expression=AdditionOrSubtraction
+Model:
+	elements+=Element*
+;
+
+Element:
+	Expression | EvaluateExpression
+;
+
+EvaluateExpression:
+	'result' 'is' expression=Expression
+;
+
+Expression:
+	AdditionOrSubtraction
 ;
 
 AdditionOrSubtraction returns Expression:
@@ -19,9 +31,23 @@ MultiplicationOrDivision returns Expression:
 ;
 
 Primary returns Expression:
-	Literal | '(' AdditionOrSubtraction ')'
+	Literal | VariableDeclaration | VariableReference | Parenthesis
 ;
 
 Literal:
 	value=INT
 ;
+
+VariableDeclaration:
+	{VariableDeclaration} 'let' name=ID '=' expression=Expression
+	( 'in' in=Expression 'end')
+;
+
+VariableReference:
+	variable=[VariableDeclaration]
+;
+
+Parenthesis returns Expression:
+	'(' Expression ')'
+;
+

@@ -4,10 +4,17 @@
 package dk.sdu.mmmi.mdsd.ui
 
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider
+import dk.sdu.mmmi.mdsd.ui.hover.MathAssignmentLanguageEObjectHoverProvider
 
 /**
  * Use this class to register components to be used within the Eclipse IDE.
  */
 @FinalFieldsConstructor
 class MathAssignmentLanguageUiModule extends AbstractMathAssignmentLanguageUiModule {
+	
+	def Class<? extends IEObjectHoverProvider> bindIEObjectHoverProvider() {
+		MathAssignmentLanguageEObjectHoverProvider
+	}
+
 }
