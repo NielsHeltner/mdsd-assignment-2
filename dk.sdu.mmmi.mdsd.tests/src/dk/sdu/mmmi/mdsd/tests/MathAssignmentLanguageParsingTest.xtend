@@ -10,13 +10,13 @@ import org.eclipse.xtext.testing.util.ParseHelper
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.^extension.ExtendWith
-import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.MathematicalExpression
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Model
 
 @ExtendWith(InjectionExtension)
 @InjectWith(MathAssignmentLanguageInjectorProvider)
 class MathAssignmentLanguageParsingTest {
 	@Inject
-	ParseHelper<MathematicalExpression> parseHelper
+	ParseHelper<Model> parseHelper
 	
 	@Test
 	def void loadModel() {

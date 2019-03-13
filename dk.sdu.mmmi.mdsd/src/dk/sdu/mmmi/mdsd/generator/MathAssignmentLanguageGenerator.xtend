@@ -16,6 +16,7 @@ import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Model
 import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.EvaluateExpression
 import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.VariableReference
 import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.VariableDeclaration
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.In
 
 /**
  * Generates code from your model files on save.
@@ -38,6 +39,10 @@ class MathAssignmentLanguageGenerator extends AbstractGenerator {
 	 */
 	def dispatch CharSequence display(VariableDeclaration element) {
 		'''var «element.name» = «element.expression.display» «IF element.in !== null» in («element.in.display») «ENDIF»'''
+	}
+	
+	def dispatch CharSequence display(In element) {
+		'''«element.expression.display»'''
 	}
 	
 	def dispatch CharSequence display(EvaluateExpression element) {

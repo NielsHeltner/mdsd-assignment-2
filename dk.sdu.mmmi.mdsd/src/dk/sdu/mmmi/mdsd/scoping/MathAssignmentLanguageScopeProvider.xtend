@@ -3,7 +3,6 @@
  */
 package dk.sdu.mmmi.mdsd.scoping
 
-
 /**
  * This class contains custom scoping description.
  * 

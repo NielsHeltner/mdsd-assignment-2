@@ -7,6 +7,7 @@ import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Division
 import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Literal
 import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.VariableReference
 import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.VariableDeclaration
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.In
 
 class MathAssignmentLanguageInterpreter {
 	
@@ -35,11 +36,15 @@ class MathAssignmentLanguageInterpreter {
 	
 	def dispatch int compute(VariableDeclaration expression) {
 		//compute(expression.expression)
-		-1
+		compute(expression.in) // result of a variable declaration should be the result of the 'in'
+	}
+	
+	def dispatch int compute(In expression) {
+		compute(expression.expression)
 	}
 	
 	def dispatch int compute(VariableReference expression) {
-		compute(expression.variable)
+		compute(expression.variable.expression) // result of a variable reference should be the variable's assignment
 	}
 	
 }

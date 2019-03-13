@@ -16,13 +16,10 @@ class MathAssignmentLanguageEObjectHoverProvider extends DefaultEObjectHoverProv
 	extension MathAssignmentLanguageInterpreter
 
 	override getHoverInfoAsHtml(EObject object) {
-		var Expression expression
-		if (object instanceof VariableDeclaration) {
-			expression = object.expression
-		}
 		if (object instanceof Expression && object.programHasNoError) {
-			expression = object as Expression
+			val expression = object as Expression
 			println(object)
+			println('Container: ' + object.eContainer)
 			return '''
 				<p>
 				result = <b>«expression.compute»</b>
