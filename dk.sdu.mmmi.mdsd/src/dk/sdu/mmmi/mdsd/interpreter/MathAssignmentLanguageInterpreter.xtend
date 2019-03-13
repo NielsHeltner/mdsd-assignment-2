@@ -35,7 +35,6 @@ class MathAssignmentLanguageInterpreter {
 	}
 	
 	def dispatch int compute(VariableDeclaration expression) {
-		//compute(expression.expression)
 		compute(expression.in) // result of a variable declaration should be the result of the 'in'
 	}
 	
