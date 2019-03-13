@@ -26,28 +26,17 @@ import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.In
 class MathAssignmentLanguageGenerator extends AbstractGenerator {
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
-		val math = resource.allContents.filter(Model).head
-		//System.out.println("Math expression = " + math.elements.display)
-		math.elements.forEach[
+		val root = resource.allContents.filter(Model).head
+		root.elements.forEach[
 			println(display)
 		]
 	}
 	
-	
 	/**
 	 * Start of recursive multi-dispatch methods for displaying an arithmetic expression's complete syntax tree
 	 */
-	def dispatch CharSequence display(VariableDeclaration element) {
-		'''var «element.name» = «element.expression.display» «IF element.in !== null» in («element.in.display») «ENDIF»'''
-	}
-	
-	def dispatch CharSequence display(In element) {
-		'''«element.expression.display»'''
-	}
-	
-	def dispatch CharSequence display(EvaluateExpression element) {
+	def dispatch CharSequence display(EvaluateExpression element)
 		'''Result is = «element.expression.display»'''
-	}
 	
 	def dispatch CharSequence display(Addition expression)
 		'''(«expression.left.display» + «expression.right.display»)'''
@@ -61,10 +50,16 @@ class MathAssignmentLanguageGenerator extends AbstractGenerator {
 	def dispatch CharSequence display(Division expression)
 		'''(«expression.left.display» / «expression.right.display»)'''
 	
+	def dispatch CharSequence display(VariableDeclaration declaration)
+		'''var «declaration.name» = «declaration.expression.display»«IF declaration.in !== null»«declaration.in.display»«ENDIF»'''
+	
+	def dispatch CharSequence display(In in)
+		''' in «in.expression.display»'''
+	
+	def dispatch CharSequence display(VariableReference reference)
+		'''«reference.variable.expression.display»'''
+	
 	def dispatch display(Literal expression)
 		'''«expression.value»'''
-	
-	def dispatch CharSequence display(VariableReference expression)
-		'''«expression.variable.expression.display»'''
 	
 }

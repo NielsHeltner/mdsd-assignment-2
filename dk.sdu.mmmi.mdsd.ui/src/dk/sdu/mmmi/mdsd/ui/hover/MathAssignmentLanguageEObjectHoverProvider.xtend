@@ -28,7 +28,11 @@ class MathAssignmentLanguageEObjectHoverProvider extends DefaultEObjectHoverProv
 		}
 	}
 
-	def programHasNoError(EObject object) {
+	/**
+	 * Manually invoke the validator, since the interpreter expects a complete, 
+	 * valid model.
+	 */
+	def private programHasNoError(EObject object) {
 		Diagnostician.INSTANCE.validate(object.rootContainer).children.empty
 	}
 
