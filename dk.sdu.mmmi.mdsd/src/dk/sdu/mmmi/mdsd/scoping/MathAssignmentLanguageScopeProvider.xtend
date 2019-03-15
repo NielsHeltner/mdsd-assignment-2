@@ -40,6 +40,7 @@ class MathAssignmentLanguageScopeProvider extends AbstractMathAssignmentLanguage
 				.takeWhile[it !== context.farthestContainer] // traverse sequentially from root until the outermost container of the expression is hit (guards against forward references)
 				.filter(VariableDeclaration)
 				.filter[in === null] // filter away declarations with an 'in', as that declaration is only visible in that scope
+				.toList.reverse // reverse the list of candidates so the declaration closest to the reference is chosen first
 			return Scopes.scopeFor(localCandidates, Scopes.scopeFor(globalCandidates))
 		}
 		return super.getScope(context, reference)
