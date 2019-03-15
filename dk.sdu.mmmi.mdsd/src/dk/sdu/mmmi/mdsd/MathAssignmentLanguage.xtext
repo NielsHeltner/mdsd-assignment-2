@@ -40,11 +40,11 @@ Literal:
 
 VariableDeclaration:
 	{VariableDeclaration} 'let' name=ID '=' expression=Expression
-	(in=In)
+	(in=In)? 'end'
 ;
 
 In:
-	'in' expression=Expression 'end'
+	'in' expression=Expression
 ;
 
 VariableReference:

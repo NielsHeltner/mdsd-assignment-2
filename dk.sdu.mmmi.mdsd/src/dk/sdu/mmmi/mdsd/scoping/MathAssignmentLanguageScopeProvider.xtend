@@ -4,11 +4,13 @@
 package dk.sdu.mmmi.mdsd.scoping
 
 import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.MathAssignmentLanguagePackage
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Model
 import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.VariableDeclaration
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.xtext.scoping.Scopes
 
+import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.xtext.EcoreUtil2.getAllContainers
 
 /**
@@ -19,17 +21,51 @@ import static extension org.eclipse.xtext.EcoreUtil2.getAllContainers
  */
 class MathAssignmentLanguageScopeProvider extends AbstractMathAssignmentLanguageScopeProvider {
 	
-	/*
-	 * Search for scope candidates of type VariableDeclaration for resolving a VariableReference.
+	val epackage = MathAssignmentLanguagePackage.eINSTANCE
+	
+	/**
+	 * Search for local and global scope candidates of type VariableDeclaration for resolving a VariableReference.
 	 * 
-	 * Searching is done bottom-up to allow shadowing / locally overwriting variables.
+	 * Searching for local candidates is done bottom-up to allow shadowing / locally overwriting variables.
+	 * Searching for global candidates is done from top to bottom of declarations, filtering away declarations with an 'in'.
 	 */
 	override getScope(EObject context, EReference reference) {
-		if (reference == MathAssignmentLanguagePackage.eINSTANCE.variableReference_Variable) {
-			val candidates = context.getAllContainers.filter(VariableDeclaration)
-			return Scopes.scopeFor(candidates)
+		if (reference == epackage.variableReference_Variable) {
+			var localCandidates = context.getAllContainers.filter(VariableDeclaration)
+			if (context.isContainedInFeature(epackage.variableDeclaration_Expression)) {
+				localCandidates = localCandidates.drop(1) // if reference is contained in a declaration assignment, drop the declaration itself from the scope (guards against self references)
+			}
+			
+			val globalCandidates = context.getRootContainer.eContents
+				.takeWhile[it !== context.farthestContainer] // traverse sequentially from root until the outermost container of the expression is hit (guards against forward references)
+				.filter(VariableDeclaration)
+				.filter[in === null] // filter away declarations with an 'in', as that declaration is only visible in that scope
+			return Scopes.scopeFor(localCandidates, Scopes.scopeFor(globalCandidates))
 		}
 		return super.getScope(context, reference)
+	}
+	
+	/**
+	 * Recursively checks if an object is contained a feature.
+	 */
+	def private boolean isContainedInFeature(EObject context, EReference reference) {
+		if (context.eContainmentFeature === null) {
+			return false
+		}
+		return context.eContainmentFeature == reference || context.eContainer.isContainedInFeature(reference)
+	}
+	
+	/**
+	 * Recursively finds the object's farthest / outermost container, while still remaining in the Model container. 
+	 */
+	def private EObject getFarthestContainer(EObject context) {
+		val container = context.eContainer
+		switch container {
+			Model:
+				return context
+			default:
+				return container.getFarthestContainer
+		}
 	}
 
 }

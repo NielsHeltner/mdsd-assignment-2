@@ -15,11 +15,10 @@ class MathAssignmentLanguageEObjectHoverProvider extends DefaultEObjectHoverProv
 	extension MathAssignmentLanguageInterpreter
 
 	override getHoverInfoAsHtml(EObject object) {
-		if (object instanceof Expression && object.programHasNoError) {
-			val expression = object as Expression
+		if (object.programHasNoErrors && object instanceof Expression) {
 			return '''
 				<p>
-				result = <b>«expression.compute»</b>
+				result = <b>«object.compute»</b>
 				</p>
 			'''
 		}
@@ -32,7 +31,7 @@ class MathAssignmentLanguageEObjectHoverProvider extends DefaultEObjectHoverProv
 	 * Manually invoke the validator, since the interpreter expects a complete, 
 	 * valid model.
 	 */
-	def private programHasNoError(EObject object) {
+	def private programHasNoErrors(EObject object) {
 		Diagnostician.INSTANCE.validate(object.rootContainer).children.empty
 	}
 

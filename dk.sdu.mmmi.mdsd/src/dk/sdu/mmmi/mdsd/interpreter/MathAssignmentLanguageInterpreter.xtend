@@ -31,7 +31,12 @@ class MathAssignmentLanguageInterpreter {
 	}
 	
 	def dispatch int compute(VariableDeclaration declaration) {
-		declaration.in.compute // result of a variable declaration expression should be the result of the 'in' expression
+		if (declaration.in !== null) {
+			declaration.in.compute // result of a variable declaration expression should be the result of the 'in' expression
+		}
+		else {
+			declaration.expression.compute // if no 'in'-scope, the result is the assignment expression
+		}
 	}
 	
 	def dispatch int compute(In in) {
