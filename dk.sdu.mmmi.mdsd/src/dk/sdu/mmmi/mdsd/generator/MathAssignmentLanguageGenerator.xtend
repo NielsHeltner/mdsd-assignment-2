@@ -5,18 +5,18 @@ package dk.sdu.mmmi.mdsd.generator
 
 import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Addition
 import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Division
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.EvaluateExpression
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.In
 import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Literal
 import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Multiplication
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Root
 import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Subtraction
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.VariableDeclaration
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.VariableReference
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
-import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Model
-import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.EvaluateExpression
-import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.VariableReference
-import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.VariableDeclaration
-import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.In
 
 /**
  * Generates code from your model files on save.
@@ -26,7 +26,7 @@ import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.In
 class MathAssignmentLanguageGenerator extends AbstractGenerator {
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
-		val root = resource.allContents.filter(Model).head
+		val root = resource.allContents.filter(Root).head
 		root.elements.forEach[
 			println(display)
 		]

@@ -4,7 +4,7 @@
 package dk.sdu.mmmi.mdsd.scoping
 
 import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.MathAssignmentLanguagePackage
-import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Model
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Root
 import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.VariableDeclaration
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
@@ -62,7 +62,7 @@ class MathAssignmentLanguageScopeProvider extends AbstractMathAssignmentLanguage
 	def private EObject getFarthestContainer(EObject context) {
 		val container = context.eContainer
 		switch container {
-			Model:
+			Root:
 				return context
 			default:
 				return container.getFarthestContainer

@@ -4,19 +4,19 @@
 package dk.sdu.mmmi.mdsd.tests
 
 import com.google.inject.Inject
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Root
 import org.eclipse.xtext.testing.InjectWith
 import org.eclipse.xtext.testing.extensions.InjectionExtension
 import org.eclipse.xtext.testing.util.ParseHelper
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.^extension.ExtendWith
-import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Model
 
 @ExtendWith(InjectionExtension)
 @InjectWith(MathAssignmentLanguageInjectorProvider)
 class MathAssignmentLanguageParsingTest {
 	@Inject
-	ParseHelper<Model> parseHelper
+	ParseHelper<Root> parseHelper
 	
 	@Test
 	def void loadModel() {

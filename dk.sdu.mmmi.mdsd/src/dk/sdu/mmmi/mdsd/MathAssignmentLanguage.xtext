@@ -2,7 +2,7 @@ grammar dk.sdu.mmmi.mdsd.MathAssignmentLanguage with org.eclipse.xtext.common.Te
 
 generate mathAssignmentLanguage "http://www.sdu.dk/mmmi/mdsd/MathAssignmentLanguage"
 
-Model:
+Root:
 	elements+=Element*
 ;
 
