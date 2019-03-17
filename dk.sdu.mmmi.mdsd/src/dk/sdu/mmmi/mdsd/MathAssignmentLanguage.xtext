@@ -39,7 +39,7 @@ Literal:
 ;
 
 VariableDeclaration:
-	{VariableDeclaration} 'let' name=ID '=' expression=Expression
+	'let' name=ID '=' expression=Expression
 	(in=In)? 'end'
 ;
 
@@ -54,4 +54,3 @@ VariableReference:
 Parenthesis returns Expression:
 	'(' Expression ')'
 ;
-
