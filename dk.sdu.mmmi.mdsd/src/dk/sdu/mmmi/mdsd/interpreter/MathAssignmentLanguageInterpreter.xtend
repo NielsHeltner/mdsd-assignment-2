@@ -8,12 +8,17 @@ import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Multiplication
 import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.Subtraction
 import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.VariableDeclaration
 import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.VariableReference
+import dk.sdu.mmmi.mdsd.mathAssignmentLanguage.EvaluateExpression
 
 class MathAssignmentLanguageInterpreter {
 	
 	/**
 	 * Start of recursive multi-dispatch methods for interpreting an expression
 	 */
+	def dispatch int compute(EvaluateExpression element) {
+		element.expression.compute
+	}
+	
 	def dispatch int compute(Addition expression) {
 		expression.left.compute + expression.right.compute
 	}
